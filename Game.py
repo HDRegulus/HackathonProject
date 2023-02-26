@@ -1,24 +1,67 @@
 import pygame
 import os
 
-WIDTH, HEIGHT = 900, 500
+WIDTH, HEIGHT = 1100, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("GAME")
 
 PURPLE = (216,191,216)
 FPS = 60
+VEL = 5;
 
-PLAYER1_IMG = pygame.image.load(os.path.join('ASSETS', 'sPlayerIdle_strip4.png'))
-PLAYER2_IMG = pygame.image.load(os.path.join('ASSETS', 'sEnemy_strip7.png'))
+CHAR_WIDTH, CHAR_HEIGHT = 70, 70
 
-def draw_window():
+grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
+grass = pygame.transform.scale(grass_Image, (WIDTH, HEIGHT))
+charizard_Image = pygame.image.load(os.path.join('ASSETS', 'charizard.png'))
+charizard = pygame.transform.scale(charizard_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+sonic_Image = pygame.image.load(os.path.join('ASSETS', 'sonic.png'))
+sonic = pygame.transform.scale(sonic_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+enemy1_Image = pygame.image.load(os.path.join('ASSETS', 'enemy1.png'))
+enemy1 = pygame.transform.scale(enemy1_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+enemy2_Image = pygame.image.load(os.path.join('ASSETS', 'enemy2.png'))
+enemy2 = pygame.transform.scale(enemy2_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+rick_Image = pygame.image.load(os.path.join('ASSETS', 'rick.png'))
+rick = pygame.transform.scale(rick_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+
+def draw_window(player1, player2, bad1, bad2, bad3):
     WIN.fill(PURPLE)
-    WIN.blit(PLAYER1_IMG, (100, 100))
-    WIN.blit(PLAYER2_IMG, (100, 300))
+    WIN.blit(grass, (0, 0))
+    WIN.blit(charizard, (player1.x, player1.y))
+    WIN.blit(sonic, (player2.x, player2.y))
+    WIN.blit(enemy1, (bad1.x, bad1.y))
+    WIN.blit(enemy2, (bad2.x, bad2.y))
+    WIN.blit(rick, (bad3.x, bad3.y))
     # update the display
     pygame.display.update()
 
+def player1_movement(keys_pressed, player1):
+        if keys_pressed[pygame.K_w]: # UP
+            player1.y -= VEL;
+        if keys_pressed[pygame.K_a]: # LEFT
+            player1.x -= VEL;
+        if keys_pressed[pygame.K_s]: # DOWN
+            player1.y += VEL;
+        if keys_pressed[pygame.K_d]: # RIGHT
+            player1.x += VEL;
+
+def player2_movement(keys_pressed, player2):
+        if keys_pressed[pygame.K_UP]: # UP
+            player2.y -= VEL;
+        if keys_pressed[pygame.K_LEFT]: # LEFT
+            player2.x -= VEL;
+        if keys_pressed[pygame.K_DOWN]: # DOWN
+            player2.y += VEL;
+        if keys_pressed[pygame.K_RIGHT]: # RIGHT
+            player2.x += VEL;
+
 def main():
+    player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
+    player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
+    bad1 = pygame.Rect(0, 0, CHAR_WIDTH, CHAR_HEIGHT)
+    bad2 = pygame.Rect(1030, 0, CHAR_WIDTH, CHAR_HEIGHT)
+    bad3 = pygame.Rect(0, 530, CHAR_WIDTH, CHAR_HEIGHT)
+    
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -28,8 +71,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        
+        keys_pressed = pygame.key.get_pressed()
+        player1_movement(keys_pressed, player1)
+        player2_movement(keys_pressed, player2)
+        draw_window(player1, player2, bad1, bad2, bad3)
 
-        draw_window()
+        chasePlayer(player1, player2, bad1)
+        chasePlayer(player1, player2, bad2)
+        chasePlayer(player1, player2, bad3)
 
     # shut down Pygame
     pygame.quit()
