@@ -58,18 +58,28 @@ emptyHeart_Image = pygame.image.load(os.path.join('ASSETS', 'emptyHeart.png'))
 emptyHeart = pygame.transform.scale(emptyHeart_Image, (30,30))
 
 def draw_window(player1, player2, player_1_bullets, player_2_bullets, enemyArr):
-    WIN.fill(PURPLE)
-    WIN.blit(grass, (0, 0))
-    if player1Alive == True:
-        WIN.blit(charizard, (player1.x, player1.y))
-    if player2Alive == True:
-        WIN.blit(sonic, (player2.x, player2.y))
-    for enemy in enemyArr:
-        WIN.blit(enemy[0], (enemy[1].x, enemy[1].y))
-    for bullet in player_1_bullets:
-        pygame.draw.rect(WIN, RED, bullet)
-    for bullet in player_2_bullets:
-        pygame.draw.rect(WIN, YELLOW, bullet)
+    if player1Alive == True or player2Alive == True:
+        WIN.fill(PURPLE)
+        WIN.blit(grass, (0, 0))
+        if player1Alive == True:
+            WIN.blit(charizard, (player1.x, player1.y))
+        if player2Alive == True:
+            WIN.blit(sonic, (player2.x, player2.y))
+        for enemy in enemyArr:
+            WIN.blit(enemy[0], (enemy[1].x, enemy[1].y))
+        for bullet in player_1_bullets:
+            pygame.draw.rect(WIN, RED, bullet)
+        for bullet in player_2_bullets:
+            pygame.draw.rect(WIN, YELLOW, bullet)
+    else:
+        WIN.blit(LetterG, (200, 200))
+        WIN.blit(LetterA, (300, 200))
+        WIN.blit(LetterM, (400, 200))
+        WIN.blit(LetterE1, (500, 200))
+        WIN.blit(LetterO, (600, 200))
+        WIN.blit(LetterV, (700, 200))
+        WIN.blit(LetterE2, (800, 200))
+        WIN.blit(LetterR, (900, 200))
     # update the display
     pygame.display.update()
 
