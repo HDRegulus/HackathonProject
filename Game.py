@@ -54,17 +54,26 @@ emptyHeart_Image = pygame.image.load(os.path.join('ASSETS', 'emptyHeart.png'))
 emptyHeart = pygame.transform.scale(emptyHeart_Image, (30,30))
 
 def draw_window(player1, player2, enemyArr):
-    WIN.fill(PURPLE)
-    WIN.blit(grass, (0, 0))
-    if player1Alive == True:
-        WIN.blit(charizard, (player1.x, player1.y))
-    if player2Alive == True:
-        WIN.blit(sonic, (player2.x, player2.y))
-    for enemy in enemyArr:
-        WIN.blit(enemy[0], (enemy[1].x, enemy[1].y))
-    # update the display
-    pygame.display.update()
-
+    if player1Alive != False or player2Alive != False:
+        WIN.fill(PURPLE)
+        WIN.blit(grass, (0, 0))
+        if player1Alive == True:
+            WIN.blit(charizard, (player1.x, player1.y))
+        if player2Alive == True:
+            WIN.blit(sonic, (player2.x, player2.y))
+        for enemy in enemyArr:
+            WIN.blit(enemy[0], (enemy[1].x, enemy[1].y))
+    else:
+        WIN.blit(LetterG, (200, 200))
+        WIN.blit(LetterA, (300, 200))
+        WIN.blit(LetterM, (400, 200))
+        WIN.blit(LetterE1, (500, 200))
+        WIN.blit(LetterO, (600, 200))
+        WIN.blit(LetterV, (700, 200))
+        WIN.blit(LetterE2, (800, 200))
+        WIN.blit(LetterR, (900, 200))
+        # update the display
+        #pygame.display.update()
 
 def player1_movement(keys_pressed, player1):
     if keys_pressed[pygame.K_w] and player1.y - VEL > 0:  # UP
@@ -85,7 +94,6 @@ def player2_movement(keys_pressed, player2):
         player2.y += VEL
     if keys_pressed[pygame.K_RIGHT] and player2.x + VEL + player2.width < WIDTH:  # RIGHT
         player2.x += VEL
-
 
 def chasePlayer(player1, player2, enemy):
     chasePlayer = player1
@@ -117,18 +125,6 @@ def hitPlayer(player1, player2, enemy):
         Player2Health = Player2Health - 5
         if Player2Health <= 0:
             player2Alive = False
-
-def gameOver(G, A, M, E, O, V, e, R):
-    if player1Alive == False and player2Alive == False:
-            WIN.blit(LetterG, (G.x, G.y))
-            WIN.blit(LetterA, (A.x, A.y))
-            WIN.blit(LetterM, (M.x, M.y))
-            WIN.blit(LetterE1, (E.x, E.y))
-            WIN.blit(LetterO, (O.x, O.y))
-            WIN.blit(LetterV, (V.x, V.y))
-            WIN.blit(LetterE2, (e.x, e.y))
-            WIN.blit(LetterR, (R.x, R.y))
-    pygame.display.update()
 
 def playerHealth(player1, player2):
     global Player1Health
@@ -195,18 +191,9 @@ def playerHealth(player1, player2):
 
     pygame.display.update()
 
-
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
     player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
-    G = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_WIDTH)
-    A = pygame.Rect(300, 200, CHAR_WIDTH, CHAR_WIDTH)
-    M = pygame.Rect(400, 200, CHAR_WIDTH, CHAR_WIDTH)
-    E = pygame.Rect(500, 200, CHAR_WIDTH, CHAR_WIDTH)
-    O = pygame.Rect(600, 200, CHAR_WIDTH, CHAR_WIDTH)
-    V = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_WIDTH)
-    e = pygame.Rect(800, 200, CHAR_WIDTH, CHAR_WIDTH)
-    R = pygame.Rect(900, 200, CHAR_WIDTH, CHAR_WIDTH)
 
     enemyArr = []
 
@@ -243,15 +230,12 @@ def main():
 
         playerHealth(player1, player2)
 
-        gameOver(G, A, M, E, O, V, e, R)
-
         draw_window(player1, player2, enemyArr)
 
         spawnTime += 1
 
     # shut down Pygame
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()
