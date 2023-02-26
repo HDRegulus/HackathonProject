@@ -66,6 +66,7 @@ halfHeart = pygame.transform.scale(halfHeart_Image, (30, 30))
 emptyHeart_Image = pygame.image.load(os.path.join('ASSETS', 'emptyHeart.png'))
 emptyHeart = pygame.transform.scale(emptyHeart_Image, (30, 30))
 
+
 # Draw window will blit the player and enemies onto the WIN, and also keep track of player alive
 # When player isnt alive, it will display game over
 def draw_window(player1, player2, player_1_bullets, player_2_bullets, enemyArr):
@@ -94,6 +95,7 @@ def draw_window(player1, player2, player_1_bullets, player_2_bullets, enemyArr):
     # update the display
     pygame.display.update()
 
+
 # Defines player 1 movement
 def player1_movement(keys_pressed, player1):
     if keys_pressed[pygame.K_w] and player1.y - VEL > 0:  # UP
@@ -105,6 +107,7 @@ def player1_movement(keys_pressed, player1):
     if keys_pressed[pygame.K_d] and player1.x + VEL + player1.width < WIDTH:  # RIGHT
         player1.x += VEL
 
+
 # Defines player 2 movement
 def player2_movement(keys_pressed, player2):
     if keys_pressed[pygame.K_UP] and player2.y - VEL > 0:  # UP
@@ -115,6 +118,7 @@ def player2_movement(keys_pressed, player2):
         player2.y += VEL
     if keys_pressed[pygame.K_RIGHT] and player2.x + VEL + player2.width < WIDTH:  # RIGHT
         player2.x += VEL
+
 
 # This sets the enemies to chase the closest player
 def chasePlayer(player1, player2, enemy):
@@ -135,6 +139,7 @@ def chasePlayer(player1, player2, enemy):
     if enemy.y > chasePlayer.y:
         enemy.y -= 1
 
+
 # If the player is hit, it will decrease the health of players
 def hitPlayer(player1, player2, enemy):
     global Player1Health, Player2Health
@@ -150,11 +155,13 @@ def hitPlayer(player1, player2, enemy):
         if Player2Health <= 0:
             player2Alive = False
 
+
 # Checks if the bullet will hit the enemy
 def hitEnemies(enemyArr, bullet):
     for enemy in enemyArr:
         if bullet.colliderect(enemy[1]):
             enemyArr.remove(enemy)
+
 
 # Will blit the game over when players both die
 def gameOver(G, A, M, E, O, V, e, R):
@@ -168,6 +175,7 @@ def gameOver(G, A, M, E, O, V, e, R):
         WIN.blit(LetterE2, (e.x, e.y))
         WIN.blit(LetterR, (R.x, R.y))
     pygame.display.update()
+
 
 # Displays the current amount of health that the player has
 def playerHealth(player1, player2):
@@ -235,6 +243,7 @@ def playerHealth(player1, player2):
 
     pygame.display.update()
 
+
 # The bullets that fire from each player, after pressing 'ctrl' on ether side will fire the bullets
 def bulletMovement(player_1_bullets, player_2_bullets):
     if len(player_1_bullets) > 0:
@@ -254,6 +263,7 @@ def bulletMovement(player_1_bullets, player_2_bullets):
         if player_2_bullets[0].y > HEIGHT and player_2_bullets[1].y < 0 and player_2_bullets[2].x > WIDTH and \
                 player_2_bullets[3].x < 0:
             player_2_bullets.clear()
+
 
 # Defines the beginning rectangles to collide, keeps track of bullet spawning
 # And also will randomly spawn the enemies
