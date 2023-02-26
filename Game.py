@@ -26,6 +26,7 @@ enemy2_Image = pygame.image.load(os.path.join('ASSETS', 'enemy2.png'))
 enemy2 = pygame.transform.scale(enemy2_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 rick_Image = pygame.image.load(os.path.join('ASSETS', 'rick.png'))
 rick = pygame.transform.scale(rick_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+enemiesImageArr = [enemy1, enemy2, rick]
 LetterA_Image = pygame.image.load(os.path.join('ASSETS', 'A.png'))
 LetterA = pygame.transform.scale(LetterA_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 LetterE1_Image = pygame.image.load(os.path.join('ASSETS', 'E.png'))
@@ -43,8 +44,7 @@ LetterR = pygame.transform.scale(LetterR_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 LetterV_Image = pygame.image.load(os.path.join('ASSETS', 'V.png'))
 LetterV = pygame.transform.scale(LetterV_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 
-
-def draw_window(player1, player2, bad1, bad2, bad3, enemyArr):
+def draw_window(player1, player2, enemyArr):
     WIN.fill(PURPLE)
     WIN.blit(grass, (0, 0))
     if player1Alive == True:
@@ -52,10 +52,7 @@ def draw_window(player1, player2, bad1, bad2, bad3, enemyArr):
     if player2Alive == True:
         WIN.blit(sonic, (player2.x, player2.y))
     for enemy in enemyArr:
-        WIN.blit(rick, (enemy.x, enemy.y))
-    WIN.blit(enemy1, (bad1.x, bad1.y))
-    WIN.blit(enemy2, (bad2.x, bad2.y))
-    WIN.blit(rick, (bad3.x, bad3.y))
+        WIN.blit(enemy[0], (enemy[1].x, enemy[1].y))
     # update the display
     pygame.display.update()
 
@@ -82,41 +79,34 @@ def player2_movement(keys_pressed, player2):
         player2.x += VEL
 
 
-def chasePlayer(player1, player2, bad):
-    distPlayer1 = (abs(player1.x - bad.x) ** 2 + abs(player1.y - bad.y) ** 2) ** (1 / 2)
-    distPlayer2 = (abs(player2.x - bad.x) ** 2 + abs(player2.y - bad.y) ** 2) ** (1 / 2)
-
-    if player1Alive == True:
-        chasePlayer = player1
-    else:
+def chasePlayer(player1, player2, enemy):
+    chasePlayer = player1
+    if player1Alive and player2Alive:
+        distPlayer1 = (abs(player1.x - enemy.x) ** 2 + abs(player1.y - enemy.y) ** 2) ** (1 / 2)
+        distPlayer2 = (abs(player2.x - enemy.x) ** 2 + abs(player2.y - enemy.y) ** 2) ** (1 / 2)
+        if distPlayer1 > distPlayer2:
+            chasePlayer = player2
+    elif player2Alive:
         chasePlayer = player2
 
-    if distPlayer1 > distPlayer2:
-        if player2Alive == True:
-            chasePlayer = player2
-    if bad.x < chasePlayer.x:
-        bad.x += 1
-    if bad.x > chasePlayer.x:
-        bad.x -= 1
-    if bad.y < chasePlayer.y:
-        bad.y += 1
-    if bad.y > chasePlayer.y:
-        bad.y -= 1
+    if enemy.x < chasePlayer.x:
+        enemy.x += 1
+    if enemy.x > chasePlayer.x:
+        enemy.x -= 1
+    if enemy.y < chasePlayer.y:
+        enemy.y += 1
+    if enemy.y > chasePlayer.y:
+        enemy.y -= 1
 
-
-def hitPlayer(player1, player2, bad):
+def hitPlayer(player1, player2, enemy):
     global player1Alive, player2Alive
-    if bad.x == player1.x:
-        if bad.y == player1.y:
-            player1Alive = False
-
-    if bad.x == player2.x:
-        if bad.y == player2.y:
-            player2Alive = False
+    if enemy.x == player1.x and enemy.y == player1.y:
+        player1Alive = False
+    if enemy.x == player2.x and enemy.y == player2.y:
+        player2Alive = False
 
 def gameOver(G, A, M, E, O, V, e, R):
-    if player1Alive == False:
-        if player2Alive == False:
+    if player1Alive == False and player2Alive == False:
             WIN.blit(LetterG, (G.x, G.y))
             WIN.blit(LetterA, (A.x, A.y))
             WIN.blit(LetterM, (M.x, M.y))
@@ -130,10 +120,6 @@ def gameOver(G, A, M, E, O, V, e, R):
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
     player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
-    bad1 = pygame.Rect(0, 0, CHAR_WIDTH, CHAR_HEIGHT)
-    bad2 = pygame.Rect(1030, 0, CHAR_WIDTH, CHAR_HEIGHT)
-    bad3 = pygame.Rect(0, 530, CHAR_WIDTH, CHAR_HEIGHT)
-
     G = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_WIDTH)
     A = pygame.Rect(300, 200, CHAR_WIDTH, CHAR_WIDTH)
     M = pygame.Rect(400, 200, CHAR_WIDTH, CHAR_WIDTH)
@@ -161,7 +147,6 @@ def main():
             player1_movement(keys_pressed, player1)
         if (player2Alive == True):
             player2_movement(keys_pressed, player2)
-        draw_window(player1, player2, bad1, bad2, bad3, enemyArr)
 
         if spawnTime > 300:
             offset = 60
@@ -169,23 +154,17 @@ def main():
                               pygame.Rect(0 - offset, random.randint(0, 599), CHAR_WIDTH, CHAR_HEIGHT),
                               pygame.Rect(1099 + offset, random.randint(0, 599), CHAR_WIDTH, CHAR_HEIGHT),
                               pygame.Rect(random.randint(0, 1099), 599 + offset, CHAR_WIDTH, CHAR_HEIGHT)]
-            enemy = randomArrSpawn[random.randint(0,3)]
+            enemy = [enemiesImageArr[random.randint(0, len(enemiesImageArr) - 1)], randomArrSpawn[random.randint(0,3)]]      
             enemyArr.append(enemy)
             spawnTime = 0
-
+            
         for enemy in enemyArr:
-            chasePlayer(player1, player2, enemy)
-            hitPlayer(player1, player2, enemy)
-
-        chasePlayer(player1, player2, bad1)
-        chasePlayer(player1, player2, bad2)
-        chasePlayer(player1, player2, bad3)
-
-        hitPlayer(player1, player2, bad1)
-        hitPlayer(player1, player2, bad2)
-        hitPlayer(player1, player2, bad3)
+            chasePlayer(player1, player2, enemy[1])
+            hitPlayer(player1, player2, enemy[1])
 
         gameOver(G, A, M, E, O, V, e, R)
+
+        draw_window(player1, player2, enemyArr)
 
         spawnTime += 1
 
