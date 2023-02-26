@@ -108,8 +108,10 @@ def main():
                 run = False
         
         keys_pressed = pygame.key.get_pressed()
-        player1_movement(keys_pressed, player1)
-        player2_movement(keys_pressed, player2)
+        if (player1Alive == True):
+            player1_movement(keys_pressed, player1)
+        if (player2Alive == True):
+            player2_movement(keys_pressed, player2)
         draw_window(player1, player2, bad1, bad2, bad3)
 
         chasePlayer(player1, player2, bad1)
