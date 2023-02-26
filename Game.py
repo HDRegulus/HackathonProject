@@ -51,13 +51,20 @@ def player2_movement(keys_pressed, player2):
             player2.x += VEL
 
 def zombie_movement(zombie, player1, player2):
-    if zombie.x < player1.x:
+
+    distPlayer1 = (abs(player1.x - zombie.x) ** 2 + abs(player1.y - zombie.y) ** 2) ** (1/2)
+    distPlayer2 = (abs(player2.x - zombie.x) ** 2 + abs(player2.y - zombie.y) ** 2) ** (1/2)
+    chasePlayer = player1
+    if distPlayer1 > distPlayer2:
+        chasePlayer = player2
+
+    if zombie.x < chasePlayer.x:
         zombie.x += 1
-    if zombie.x > player1.x:
+    if zombie.x > chasePlayer.x:
         zombie.x -= 1
-    if zombie.y < player1.y:
+    if zombie.y < chasePlayer.y:
         zombie.y += 1
-    if zombie.y > player1.y:
+    if zombie.y > chasePlayer.y:
         zombie.y -= 1
 
 def main():
