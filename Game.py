@@ -2,10 +2,12 @@ import pygame
 import os
 import random
 
+# Defining window to draw game in
 WIDTH, HEIGHT = 1100, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("GAME")
 
+# Global veriable heaven
 PURPLE = (216, 191, 216)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
@@ -15,12 +17,15 @@ MAX_BULLETS = 4
 BULLET_VEL = 7
 CHAR_WIDTH, CHAR_HEIGHT = 70, 70
 
+# Values for cheacking if the player is in fact alive or not
 player1Alive = True
 player2Alive = True
 
+# pre-set player health
 Player1Health = 100
 Player2Health = 100
 
+# All image loading and setting from the assets folder
 grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
 grass = pygame.transform.scale(grass_Image, (WIDTH, HEIGHT))
 charizard_Image = pygame.image.load(os.path.join('ASSETS', 'charizard.png'))
@@ -34,6 +39,8 @@ enemy2 = pygame.transform.scale(enemy2_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 rick_Image = pygame.image.load(os.path.join('ASSETS', 'rick.png'))
 rick = pygame.transform.scale(rick_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 enemiesImageArr = [enemy1, enemy2, rick]
+
+# letters for game over
 LetterA_Image = pygame.image.load(os.path.join('ASSETS', 'A.png'))
 LetterA = pygame.transform.scale(LetterA_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 LetterE1_Image = pygame.image.load(os.path.join('ASSETS', 'E.png'))
@@ -50,13 +57,17 @@ LetterR_Image = pygame.image.load(os.path.join('ASSETS', 'R.png'))
 LetterR = pygame.transform.scale(LetterR_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 LetterV_Image = pygame.image.load(os.path.join('ASSETS', 'V.png'))
 LetterV = pygame.transform.scale(LetterV_Image, (CHAR_WIDTH, CHAR_HEIGHT))
-fullHeart_Image = pygame.image.load(os.path.join('ASSETS', 'fullHeart.png'))
-fullHeart = pygame.transform.scale(fullHeart_Image, (30,30))
-halfHeart_Image = pygame.image.load(os.path.join('ASSETS', 'halfHeart.png'))
-halfHeart = pygame.transform.scale(halfHeart_Image, (30,30))
-emptyHeart_Image = pygame.image.load(os.path.join('ASSETS', 'emptyHeart.png'))
-emptyHeart = pygame.transform.scale(emptyHeart_Image, (30,30))
 
+# heart artwork for health
+fullHeart_Image = pygame.image.load(os.path.join('ASSETS', 'fullHeart.png'))
+fullHeart = pygame.transform.scale(fullHeart_Image, (30, 30))
+halfHeart_Image = pygame.image.load(os.path.join('ASSETS', 'halfHeart.png'))
+halfHeart = pygame.transform.scale(halfHeart_Image, (30, 30))
+emptyHeart_Image = pygame.image.load(os.path.join('ASSETS', 'emptyHeart.png'))
+emptyHeart = pygame.transform.scale(emptyHeart_Image, (30, 30))
+
+# Draw window will blit the player and enemies onto the WIN, and also keep track of player alive
+# When player isnt alive, it will display game over
 def draw_window(player1, player2, player_1_bullets, player_2_bullets, enemyArr):
     if player1Alive == True or player2Alive == True:
         WIN.fill(PURPLE)
@@ -83,7 +94,7 @@ def draw_window(player1, player2, player_1_bullets, player_2_bullets, enemyArr):
     # update the display
     pygame.display.update()
 
-
+# Defines player 1 movement
 def player1_movement(keys_pressed, player1):
     if keys_pressed[pygame.K_w] and player1.y - VEL > 0:  # UP
         player1.y -= VEL
@@ -94,6 +105,7 @@ def player1_movement(keys_pressed, player1):
     if keys_pressed[pygame.K_d] and player1.x + VEL + player1.width < WIDTH:  # RIGHT
         player1.x += VEL
 
+# Defines player 2 movement
 def player2_movement(keys_pressed, player2):
     if keys_pressed[pygame.K_UP] and player2.y - VEL > 0:  # UP
         player2.y -= VEL
@@ -104,6 +116,7 @@ def player2_movement(keys_pressed, player2):
     if keys_pressed[pygame.K_RIGHT] and player2.x + VEL + player2.width < WIDTH:  # RIGHT
         player2.x += VEL
 
+# This sets the enemies to chase the closest player
 def chasePlayer(player1, player2, enemy):
     chasePlayer = player1
     if player1Alive and player2Alive:
@@ -122,58 +135,62 @@ def chasePlayer(player1, player2, enemy):
     if enemy.y > chasePlayer.y:
         enemy.y -= 1
 
+# If the player is hit, it will decrease the health of players
 def hitPlayer(player1, player2, enemy):
     global Player1Health, Player2Health
     global player1Alive, player2Alive
-    #if enemy.x == player1.x and enemy.y == player1.y:
+    # if enemy.x == player1.x and enemy.y == player1.y:
     if enemy.colliderect(player1):
-        Player1Health = Player1Health - 5
+        Player1Health = Player1Health - 3
         if Player1Health <= 0:
             player1Alive = False
     if enemy.colliderect(player2):
-    #if enemy.x == player2.x and enemy.y == player2.y:
-        Player2Health = Player2Health - 5
+        # if enemy.x == player2.x and enemy.y == player2.y:
+        Player2Health = Player2Health - 3
         if Player2Health <= 0:
             player2Alive = False
 
+# Checks if the bullet will hit the enemy
 def hitEnemies(enemyArr, bullet):
     for enemy in enemyArr:
         if bullet.colliderect(enemy[1]):
             enemyArr.remove(enemy)
 
+# Will blit the game over when players both die
 def gameOver(G, A, M, E, O, V, e, R):
     if player1Alive == False and player2Alive == False:
-            WIN.blit(LetterG, (G.x, G.y))
-            WIN.blit(LetterA, (A.x, A.y))
-            WIN.blit(LetterM, (M.x, M.y))
-            WIN.blit(LetterE1, (E.x, E.y))
-            WIN.blit(LetterO, (O.x, O.y))
-            WIN.blit(LetterV, (V.x, V.y))
-            WIN.blit(LetterE2, (e.x, e.y))
-            WIN.blit(LetterR, (R.x, R.y))
+        WIN.blit(LetterG, (G.x, G.y))
+        WIN.blit(LetterA, (A.x, A.y))
+        WIN.blit(LetterM, (M.x, M.y))
+        WIN.blit(LetterE1, (E.x, E.y))
+        WIN.blit(LetterO, (O.x, O.y))
+        WIN.blit(LetterV, (V.x, V.y))
+        WIN.blit(LetterE2, (e.x, e.y))
+        WIN.blit(LetterR, (R.x, R.y))
     pygame.display.update()
 
+# Displays the current amount of health that the player has
 def playerHealth(player1, player2):
     global Player1Health
     global Player2Health
     pygame.font.init()
 
     if Player1Health <= 100 and Player1Health > 85:
-       WIN.blit(fullHeart, (0, 0))
-       WIN.blit(fullHeart, (15, 0))
-       WIN.blit(fullHeart, (30, 0))
+        WIN.blit(fullHeart, (0, 0))
+        WIN.blit(fullHeart, (15, 0))
+        WIN.blit(fullHeart, (30, 0))
     if Player1Health <= 85 and Player1Health > 75:
-       WIN.blit(fullHeart, (0, 0))
-       WIN.blit(fullHeart, (15, 0))
-       WIN.blit(halfHeart, (30, 0))
+        WIN.blit(fullHeart, (0, 0))
+        WIN.blit(fullHeart, (15, 0))
+        WIN.blit(halfHeart, (30, 0))
     if Player1Health <= 75 and Player1Health > 65:
-       WIN.blit(fullHeart, (0, 0))
-       WIN.blit(fullHeart, (15, 0))
-       WIN.blit(emptyHeart, (30, 0))
+        WIN.blit(fullHeart, (0, 0))
+        WIN.blit(fullHeart, (15, 0))
+        WIN.blit(emptyHeart, (30, 0))
     if Player1Health <= 65 and Player1Health > 45:
-       WIN.blit(fullHeart, (0, 0))
-       WIN.blit(halfHeart, (15, 0))
-       WIN.blit(emptyHeart, (30, 0))
+        WIN.blit(fullHeart, (0, 0))
+        WIN.blit(halfHeart, (15, 0))
+        WIN.blit(emptyHeart, (30, 0))
     if Player1Health <= 45 and Player1Health > 25:
         WIN.blit(fullHeart, (0, 0))
         WIN.blit(emptyHeart, (15, 0))
@@ -188,21 +205,21 @@ def playerHealth(player1, player2):
         WIN.blit(emptyHeart, (30, 0))
 
     if Player2Health <= 100 and Player2Health > 85:
-       WIN.blit(fullHeart, (0, 25))
-       WIN.blit(fullHeart, (15, 25))
-       WIN.blit(fullHeart, (30, 25))
+        WIN.blit(fullHeart, (0, 25))
+        WIN.blit(fullHeart, (15, 25))
+        WIN.blit(fullHeart, (30, 25))
     if Player2Health <= 85 and Player2Health > 75:
-       WIN.blit(fullHeart, (0, 25))
-       WIN.blit(fullHeart, (15, 25))
-       WIN.blit(halfHeart, (30, 25))
+        WIN.blit(fullHeart, (0, 25))
+        WIN.blit(fullHeart, (15, 25))
+        WIN.blit(halfHeart, (30, 25))
     if Player2Health <= 75 and Player2Health > 65:
-       WIN.blit(fullHeart, (0, 25))
-       WIN.blit(fullHeart, (15, 25))
-       WIN.blit(emptyHeart, (30, 25))
+        WIN.blit(fullHeart, (0, 25))
+        WIN.blit(fullHeart, (15, 25))
+        WIN.blit(emptyHeart, (30, 25))
     if Player2Health <= 65 and Player2Health > 45:
-       WIN.blit(fullHeart, (0, 25))
-       WIN.blit(halfHeart, (15, 25))
-       WIN.blit(emptyHeart, (30, 25))
+        WIN.blit(fullHeart, (0, 25))
+        WIN.blit(halfHeart, (15, 25))
+        WIN.blit(emptyHeart, (30, 25))
     if Player2Health <= 45 and Player2Health > 25:
         WIN.blit(fullHeart, (0, 25))
         WIN.blit(emptyHeart, (15, 25))
@@ -218,23 +235,28 @@ def playerHealth(player1, player2):
 
     pygame.display.update()
 
+# The bullets that fire from each player, after pressing 'ctrl' on ether side will fire the bullets
 def bulletMovement(player_1_bullets, player_2_bullets):
     if len(player_1_bullets) > 0:
-        player_1_bullets[0].y += BULLET_VEL 
-        player_1_bullets[1].y -= BULLET_VEL     
-        player_1_bullets[2].x += BULLET_VEL 
-        player_1_bullets[3].x -= BULLET_VEL 
-        if player_1_bullets[0].y > HEIGHT and player_1_bullets[1].y < 0 and player_1_bullets[2].x > WIDTH and player_1_bullets[3].x < 0:
+        player_1_bullets[0].y += BULLET_VEL
+        player_1_bullets[1].y -= BULLET_VEL
+        player_1_bullets[2].x += BULLET_VEL
+        player_1_bullets[3].x -= BULLET_VEL
+        if player_1_bullets[0].y > HEIGHT and player_1_bullets[1].y < 0 and player_1_bullets[2].x > WIDTH and \
+                player_1_bullets[3].x < 0:
             player_1_bullets.clear()
 
     if len(player_2_bullets) > 0:
-        player_2_bullets[0].y += BULLET_VEL 
-        player_2_bullets[1].y -= BULLET_VEL     
-        player_2_bullets[2].x += BULLET_VEL 
-        player_2_bullets[3].x -= BULLET_VEL 
-        if player_2_bullets[0].y > HEIGHT and player_2_bullets[1].y < 0 and player_2_bullets[2].x > WIDTH and player_2_bullets[3].x < 0:
+        player_2_bullets[0].y += BULLET_VEL
+        player_2_bullets[1].y -= BULLET_VEL
+        player_2_bullets[2].x += BULLET_VEL
+        player_2_bullets[3].x -= BULLET_VEL
+        if player_2_bullets[0].y > HEIGHT and player_2_bullets[1].y < 0 and player_2_bullets[2].x > WIDTH and \
+                player_2_bullets[3].x < 0:
             player_2_bullets.clear()
 
+# Defines the beginning rectangles to collide, keeps track of bullet spawning
+# And also will randomly spawn the enemies
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
     player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
@@ -261,17 +283,17 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-    
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LCTRL and len(player_1_bullets) < MAX_BULLETS:
                 bullet = pygame.Rect(
-                    player1.x + player1.width, player1.y + player1.height//2 - 2, 10, 5)
+                    player1.x + player1.width, player1.y + player1.height // 2 - 2, 10, 5)
                 bullet1 = pygame.Rect(
-                    player1.x + player1.width, player1.y + player1.height//2 - 2, 10, 5)
+                    player1.x + player1.width, player1.y + player1.height // 2 - 2, 10, 5)
                 bullet2 = pygame.Rect(
-                    player1.x + player1.width, player1.y + player1.height//2 - 2, 10, 5)
+                    player1.x + player1.width, player1.y + player1.height // 2 - 2, 10, 5)
                 bullet3 = pygame.Rect(
-                    player1.x + player1.width, player1.y + player1.height//2 - 2, 10, 5)
+                    player1.x + player1.width, player1.y + player1.height // 2 - 2, 10, 5)
                 player_1_bullets.append(bullet)
                 player_1_bullets.append(bullet1)
                 player_1_bullets.append(bullet2)
@@ -279,13 +301,13 @@ def main():
 
             if event.key == pygame.K_RCTRL and len(player_2_bullets) < MAX_BULLETS:
                 bullet = pygame.Rect(
-                    player2.x, player2.y + player2.height//2 - 2, 10, 5)
+                    player2.x, player2.y + player2.height // 2 - 2, 10, 5)
                 bullet1 = pygame.Rect(
-                    player2.x, player2.y + player2.height//2 - 2, 10, 5)
+                    player2.x, player2.y + player2.height // 2 - 2, 10, 5)
                 bullet2 = pygame.Rect(
-                    player2.x, player2.y + player2.height//2 - 2, 10, 5)
+                    player2.x, player2.y + player2.height // 2 - 2, 10, 5)
                 bullet3 = pygame.Rect(
-                    player2.x, player2.y + player2.height//2 - 2, 10, 5)
+                    player2.x, player2.y + player2.height // 2 - 2, 10, 5)
                 player_2_bullets.append(bullet)
                 player_2_bullets.append(bullet1)
                 player_2_bullets.append(bullet2)
@@ -303,7 +325,8 @@ def main():
                               pygame.Rect(0 - offset, random.randint(0, 599), CHAR_WIDTH, CHAR_HEIGHT),
                               pygame.Rect(1099 + offset, random.randint(0, 599), CHAR_WIDTH, CHAR_HEIGHT),
                               pygame.Rect(random.randint(0, 1099), 599 + offset, CHAR_WIDTH, CHAR_HEIGHT)]
-            enemy = [enemiesImageArr[random.randint(0, len(enemiesImageArr) - 1)], randomArrSpawn[random.randint(0,3)], True]
+            enemy = [enemiesImageArr[random.randint(0, len(enemiesImageArr) - 1)], randomArrSpawn[random.randint(0, 3)],
+                     True]
             enemyArr.append(enemy)
             spawnTime = 0
 
@@ -313,7 +336,7 @@ def main():
         for bullet in player_2_bullets:
             hitEnemies(enemyArr, bullet)
         for bullet in player_1_bullets:
-                    hitEnemies(enemyArr, bullet)
+            hitEnemies(enemyArr, bullet)
 
         playerHealth(player1, player2)
         gameOver(G, A, M, E, O, V, e, R)
