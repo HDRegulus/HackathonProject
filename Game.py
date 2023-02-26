@@ -32,5 +32,5 @@ def main():
     # shut down Pygame
     pygame.quit()
 
-if name == "main":
+if __name__ == "__main__":
     main()
