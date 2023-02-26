@@ -11,18 +11,27 @@ VEL = 5;
 
 CHAR_WIDTH, CHAR_HEIGHT = 70, 70
 
+grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
+grass = pygame.transform.scale(grass_Image, (WIDTH, HEIGHT))
 charizard_Image = pygame.image.load(os.path.join('ASSETS', 'charizard.png'))
 charizard = pygame.transform.scale(charizard_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 sonic_Image = pygame.image.load(os.path.join('ASSETS', 'sonic.png'))
 sonic = pygame.transform.scale(sonic_Image, (CHAR_WIDTH, CHAR_HEIGHT))
-grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
-grass = pygame.transform.scale(grass_Image, (WIDTH, HEIGHT))
+enemy1_Image = pygame.image.load(os.path.join('ASSETS', 'enemy1.png'))
+enemy1 = pygame.transform.scale(enemy1_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+enemy2_Image = pygame.image.load(os.path.join('ASSETS', 'enemy2.png'))
+enemy2 = pygame.transform.scale(enemy2_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+rick_Image = pygame.image.load(os.path.join('ASSETS', 'rick.png'))
+rick = pygame.transform.scale(rick_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 
-def draw_window(player1, player2):
+def draw_window(player1, player2, bad1, bad2, bad3):
     WIN.fill(PURPLE)
     WIN.blit(grass, (0, 0))
     WIN.blit(charizard, (player1.x, player1.y))
     WIN.blit(sonic, (player2.x, player2.y))
+    WIN.blit(enemy1, (bad1.x, bad1.y))
+    WIN.blit(enemy2, (bad2.x, bad2.y))
+    WIN.blit(rick, (bad3.x, bad3.y))
     # update the display
     pygame.display.update()
 
@@ -49,6 +58,10 @@ def player2_movement(keys_pressed, player2):
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
     player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
+    bad1 = pygame.Rect(0, 0, CHAR_WIDTH, CHAR_HEIGHT)
+    bad2 = pygame.Rect(1030, 0, CHAR_WIDTH, CHAR_HEIGHT)
+    bad3 = pygame.Rect(0, 530, CHAR_WIDTH, CHAR_HEIGHT)
+    
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -58,10 +71,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        
         keys_pressed = pygame.key.get_pressed()
         player1_movement(keys_pressed, player1)
         player2_movement(keys_pressed, player2)
-        draw_window(player1, player2)
+        draw_window(player1, player2, bad1, bad2, bad3)
+
+        chasePlayer(player1, player2, bad1)
+        chasePlayer(player1, player2, bad2)
+        chasePlayer(player1, player2, bad3)
 
     # shut down Pygame
     pygame.quit()
