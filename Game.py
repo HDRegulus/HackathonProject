@@ -112,7 +112,7 @@ def hitPlayer(player1, player2, bad):
     global player1Alive, player2Alive
     if bad.x == player1.x:
         if bad.y == player1.y:
-            Player1Health = Player1Health - 2
+            Player1Health = Player1Health - 1
             if Player1Health <= 0:
                 player1Alive = False
     if bad.x == player2.x:
