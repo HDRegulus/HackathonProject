@@ -8,7 +8,6 @@ pygame.display.set_caption("GAME")
 PURPLE = (216,191,216)
 FPS = 60
 VEL = 5;
-
 CHAR_WIDTH, CHAR_HEIGHT = 70, 70
 
 grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
@@ -70,6 +69,15 @@ def chasePlayer(player1, player2, bad):
     if bad.y > chasePlayer.y:
         bad.y -= 1
 
+def hitPlayer(player1, player2, bad):
+    if(bad.x == player1.x):
+        if(bad.y == player1.y):
+            player1Alive == FALSE
+    
+    if(bad.x == player2.x):
+        if(bad.y == player2.y):
+            player2Alive == FALSE
+
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
     player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
@@ -95,6 +103,10 @@ def main():
         chasePlayer(player1, player2, bad1)
         chasePlayer(player1, player2, bad2)
         chasePlayer(player1, player2, bad3)
+
+        hitPlayer(player1, player2, bad1)
+        hitPlayer(player1, player2, bad2)
+        hitPlayer(player1, player2, bad3)
 
     # shut down Pygame
     pygame.quit()
