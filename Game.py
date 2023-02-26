@@ -141,12 +141,12 @@ def hitPlayer(player1, player2, enemy):
     global player1Alive, player2Alive
     # if enemy.x == player1.x and enemy.y == player1.y:
     if enemy.colliderect(player1):
-        Player1Health = Player1Health - 3
+        Player1Health = Player1Health - 2
         if Player1Health <= 0:
             player1Alive = False
     if enemy.colliderect(player2):
         # if enemy.x == player2.x and enemy.y == player2.y:
-        Player2Health = Player2Health - 3
+        Player2Health = Player2Health - 2
         if Player2Health <= 0:
             player2Alive = False
 
