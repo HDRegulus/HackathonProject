@@ -55,6 +55,21 @@ def player2_movement(keys_pressed, player2):
         if keys_pressed[pygame.K_RIGHT]: # RIGHT
             player2.x += VEL;
 
+def chasePlayer(player1, player2, bad):
+    distPlayer1 = (abs(player1.x - bad.x) ** 2 + abs(player1.y - bad.y) ** 2) ** (1/2)
+    distPlayer2 = (abs(player2.x - bad.x) ** 2 + abs(player2.y - bad.y) ** 2) ** (1/2)
+    chasePlayer = player1
+    if distPlayer1 > distPlayer2:
+        chasePlayer = player2
+    if bad.x < chasePlayer.x:
+        bad.x += 1
+    if bad.x > chasePlayer.x:
+        bad.x -= 1
+    if bad.y < chasePlayer.y:
+        bad.y += 1
+    if bad.y > chasePlayer.y:
+        bad.y -= 1
+
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
     player2 = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_HEIGHT)
