@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 WIDTH, HEIGHT = 1100, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -43,13 +44,15 @@ LetterV_Image = pygame.image.load(os.path.join('ASSETS', 'V.png'))
 LetterV = pygame.transform.scale(LetterV_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 
 
-def draw_window(player1, player2, bad1, bad2, bad3):
+def draw_window(player1, player2, bad1, bad2, bad3, enemyArr):
     WIN.fill(PURPLE)
     WIN.blit(grass, (0, 0))
     if player1Alive == True:
         WIN.blit(charizard, (player1.x, player1.y))
     if player2Alive == True:
         WIN.blit(sonic, (player2.x, player2.y))
+    for enemy in enemyArr:
+        WIN.blit(rick, (enemy.x, enemy.y))
     WIN.blit(enemy1, (bad1.x, bad1.y))
     WIN.blit(enemy2, (bad2.x, bad2.y))
     WIN.blit(rick, (bad3.x, bad3.y))
@@ -172,7 +175,7 @@ def main():
 
         for enemy in enemyArr:
             chasePlayer(player1, player2, enemy)
-            hitPlayer(player1, player2, bad1)
+            hitPlayer(player1, player2, enemy)
 
         chasePlayer(player1, player2, bad1)
         chasePlayer(player1, player2, bad2)
