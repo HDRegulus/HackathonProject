@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 WIDTH, HEIGHT = 1100, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -27,13 +28,15 @@ rick_Image = pygame.image.load(os.path.join('ASSETS', 'rick.png'))
 rick = pygame.transform.scale(rick_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 
 
-def draw_window(player1, player2, bad1, bad2, bad3):
+def draw_window(player1, player2, bad1, bad2, bad3, enemyArr):
     WIN.fill(PURPLE)
     WIN.blit(grass, (0, 0))
     if player1Alive == True:
         WIN.blit(charizard, (player1.x, player1.y))
     if player2Alive == True:
         WIN.blit(sonic, (player2.x, player2.y))
+    for enemy in enemyArr:
+        WIN.blit(rick, (enemy.x, enemy.y))
     WIN.blit(enemy1, (bad1.x, bad1.y))
     WIN.blit(enemy2, (bad2.x, bad2.y))
     WIN.blit(rick, (bad3.x, bad3.y))
@@ -103,8 +106,11 @@ def main():
     bad2 = pygame.Rect(1030, 0, CHAR_WIDTH, CHAR_HEIGHT)
     bad3 = pygame.Rect(0, 530, CHAR_WIDTH, CHAR_HEIGHT)
 
+    enemyArr = []
+
     clock = pygame.time.Clock()
     run = True
+    spawnTime = 0
     while run:
         # control the frame rate
         clock.tick(FPS)
@@ -118,7 +124,21 @@ def main():
             player1_movement(keys_pressed, player1)
         if (player2Alive == True):
             player2_movement(keys_pressed, player2)
-        draw_window(player1, player2, bad1, bad2, bad3)
+        draw_window(player1, player2, bad1, bad2, bad3, enemyArr)
+
+        if spawnTime > 300:
+            offset = 60
+            randomArrSpawn = [pygame.Rect(random.randint(0, 1099), 0 - offset, CHAR_WIDTH, CHAR_HEIGHT),
+                              pygame.Rect(0 - offset, random.randint(0, 599), CHAR_WIDTH, CHAR_HEIGHT),
+                              pygame.Rect(1099 + offset, random.randint(0, 599), CHAR_WIDTH, CHAR_HEIGHT),
+                              pygame.Rect(random.randint(0, 1099), 599 + offset, CHAR_WIDTH, CHAR_HEIGHT)]
+            enemy = randomArrSpawn[random.randint(0,3)]
+            enemyArr.append(enemy)
+            spawnTime = 0
+        
+        for enemy in enemyArr:
+            chasePlayer(player1, player2, enemy)
+            hitPlayer(player1, player2, bad1)
 
         chasePlayer(player1, player2, bad1)
         chasePlayer(player1, player2, bad2)
@@ -127,6 +147,8 @@ def main():
         hitPlayer(player1, player2, bad1)
         hitPlayer(player1, player2, bad2)
         hitPlayer(player1, player2, bad3)
+
+        spawnTime += 1
 
     # shut down Pygame
     pygame.quit()
