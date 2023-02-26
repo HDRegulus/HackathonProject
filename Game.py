@@ -131,14 +131,14 @@ def main():
     bad2 = pygame.Rect(1030, 0, CHAR_WIDTH, CHAR_HEIGHT)
     bad3 = pygame.Rect(0, 530, CHAR_WIDTH, CHAR_HEIGHT)
 
-    G = pygame.Rect(100, 200, CHAR_WIDTH, CHAR_WIDTH)
-    A = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_WIDTH)
-    M = pygame.Rect(300, 200, CHAR_WIDTH, CHAR_WIDTH)
-    E = pygame.Rect(400, 200, CHAR_WIDTH, CHAR_WIDTH)
-    O = pygame.Rect(500, 200, CHAR_WIDTH, CHAR_WIDTH)
-    V = pygame.Rect(600, 200, CHAR_WIDTH, CHAR_WIDTH)
-    e = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_WIDTH)
-    R = pygame.Rect(800, 200, CHAR_WIDTH, CHAR_WIDTH)
+    G = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_WIDTH)
+    A = pygame.Rect(300, 200, CHAR_WIDTH, CHAR_WIDTH)
+    M = pygame.Rect(400, 200, CHAR_WIDTH, CHAR_WIDTH)
+    E = pygame.Rect(500, 200, CHAR_WIDTH, CHAR_WIDTH)
+    O = pygame.Rect(600, 200, CHAR_WIDTH, CHAR_WIDTH)
+    V = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_WIDTH)
+    e = pygame.Rect(800, 200, CHAR_WIDTH, CHAR_WIDTH)
+    R = pygame.Rect(900, 200, CHAR_WIDTH, CHAR_WIDTH)
 
     clock = pygame.time.Clock()
     run = True
