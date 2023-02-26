@@ -1,7 +1,6 @@
 import pygame
 import os
 import random
-import numpy as np
 
 WIDTH, HEIGHT = 1100, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -17,8 +16,6 @@ player2Alive = True
 
 Player1Health = 100
 Player2Health = 100
-
-
 
 grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
 grass = pygame.transform.scale(grass_Image, (WIDTH, HEIGHT))
@@ -48,6 +45,12 @@ LetterR_Image = pygame.image.load(os.path.join('ASSETS', 'R.png'))
 LetterR = pygame.transform.scale(LetterR_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 LetterV_Image = pygame.image.load(os.path.join('ASSETS', 'V.png'))
 LetterV = pygame.transform.scale(LetterV_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+fullHeart_Image = pygame.image.load(os.path.join('ASSETS', 'fullHeart.png'))
+fullHeart = pygame.transform.scale(fullHeart_Image, (30,30))
+halfHeart_Image = pygame.image.load(os.path.join('ASSETS', 'halfHeart.png'))
+halfHeart = pygame.transform.scale(halfHeart_Image, (30,30))
+emptyHeart_Image = pygame.image.load(os.path.join('ASSETS', 'emptyHeart.png'))
+emptyHeart = pygame.transform.scale(emptyHeart_Image, (30,30))
 
 
 def draw_window(player1, player2, bad1, bad2, bad3, enemyArr):
@@ -136,13 +139,67 @@ def gameOver(G, A, M, E, O, V, e, R):
 
 def playerHealth(player1, player2):
     global Player1Health
+    global Player2Health
     pygame.font.init()
-    player1Font = pygame.font.Font('freesansbold.ttf', 20)
-    player1Surface = player1Font.render('Player 1 Health: '+str(Player1Health), False, (0,0,0))
-    WIN.blit(player1Surface,(0,0))
-    player2Font = pygame.font.Font('freesansbold.ttf', 20)
-    player2Surface = player2Font.render('Player 2 Health: ' + str(Player2Health), False, (0, 0, 0))
-    WIN.blit(player2Surface, (0, 20))
+
+    if Player1Health <= 100 and Player1Health > 85:
+       WIN.blit(fullHeart, (0, 0))
+       WIN.blit(fullHeart, (15, 0))
+       WIN.blit(fullHeart, (30, 0))
+    if Player1Health <= 85 and Player1Health > 75:
+       WIN.blit(fullHeart, (0, 0))
+       WIN.blit(fullHeart, (15, 0))
+       WIN.blit(halfHeart, (30, 0))
+    if Player1Health <= 75 and Player1Health > 65:
+       WIN.blit(fullHeart, (0, 0))
+       WIN.blit(fullHeart, (15, 0))
+       WIN.blit(emptyHeart, (30, 0))
+    if Player1Health <= 65 and Player1Health > 45:
+       WIN.blit(fullHeart, (0, 0))
+       WIN.blit(halfHeart, (15, 0))
+       WIN.blit(emptyHeart, (30, 0))
+    if Player1Health <= 45 and Player1Health > 25:
+        WIN.blit(fullHeart, (0, 0))
+        WIN.blit(emptyHeart, (15, 0))
+        WIN.blit(emptyHeart, (30, 0))
+    if Player1Health <= 25 and Player1Health > 0:
+        WIN.blit(halfHeart, (0, 0))
+        WIN.blit(emptyHeart, (15, 0))
+        WIN.blit(emptyHeart, (30, 0))
+    if Player1Health <= 0:
+        WIN.blit(emptyHeart, (0, 0))
+        WIN.blit(emptyHeart, (15, 0))
+        WIN.blit(emptyHeart, (30, 0))
+
+    if Player2Health <= 100 and Player2Health > 85:
+       WIN.blit(fullHeart, (0, 25))
+       WIN.blit(fullHeart, (15, 25))
+       WIN.blit(fullHeart, (30, 25))
+    if Player2Health <= 85 and Player2Health > 75:
+       WIN.blit(fullHeart, (0, 25))
+       WIN.blit(fullHeart, (15, 25))
+       WIN.blit(halfHeart, (30, 25))
+    if Player2Health <= 75 and Player2Health > 65:
+       WIN.blit(fullHeart, (0, 25))
+       WIN.blit(fullHeart, (15, 25))
+       WIN.blit(emptyHeart, (30, 25))
+    if Player2Health <= 65 and Player2Health > 45:
+       WIN.blit(fullHeart, (0, 25))
+       WIN.blit(halfHeart, (15, 25))
+       WIN.blit(emptyHeart, (30, 25))
+    if Player2Health <= 45 and Player2Health > 25:
+        WIN.blit(fullHeart, (0, 25))
+        WIN.blit(emptyHeart, (15, 25))
+        WIN.blit(emptyHeart, (30, 25))
+    if Player2Health <= 25 and Player2Health > 0:
+        WIN.blit(halfHeart, (0, 25))
+        WIN.blit(emptyHeart, (15, 25))
+        WIN.blit(emptyHeart, (30, 25))
+    if Player2Health <= 0:
+        WIN.blit(emptyHeart, (0, 25))
+        WIN.blit(emptyHeart, (15, 25))
+        WIN.blit(emptyHeart, (30, 25))
+
     pygame.display.update()
 
 
