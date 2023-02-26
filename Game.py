@@ -1,18 +1,20 @@
 import pygame
 import os
 
-WIDTH, HEIGHT = 900, 400
+WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("GAME")
 
 PURPLE = (216,191,216)
 FPS = 60
 
-CHAR_IMG = pygame.image.load(os.path.join('ASSETS', 'characters.png'))
+PLAYER1_IMG = pygame.image.load(os.path.join('ASSETS', 'sPlayerIdle_strip4.png'))
+PLAYER2_IMG = pygame.image.load(os.path.join('ASSETS', 'sEnemy_strip7.png'))
 
 def draw_window():
     WIN.fill(PURPLE)
-    WIN.blit(CHAR_IMG, (0, 0))
+    WIN.blit(PLAYER1_IMG, (100, 100))
+    WIN.blit(PLAYER2_IMG, (100, 300))
     # update the display
     pygame.display.update()
 
