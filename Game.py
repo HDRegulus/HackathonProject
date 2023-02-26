@@ -25,6 +25,22 @@ enemy2_Image = pygame.image.load(os.path.join('ASSETS', 'enemy2.png'))
 enemy2 = pygame.transform.scale(enemy2_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 rick_Image = pygame.image.load(os.path.join('ASSETS', 'rick.png'))
 rick = pygame.transform.scale(rick_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterA_Image = pygame.image.load(os.path.join('ASSETS', 'A.png'))
+LetterA = pygame.transform.scale(LetterA_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterE1_Image = pygame.image.load(os.path.join('ASSETS', 'E.png'))
+LetterE1 = pygame.transform.scale(LetterE1_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterE2_Image = pygame.image.load(os.path.join('ASSETS', 'E.png'))
+LetterE2 = pygame.transform.scale(LetterE2_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterG_Image = pygame.image.load(os.path.join('ASSETS', 'G.png'))
+LetterG = pygame.transform.scale(LetterG_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterM_Image = pygame.image.load(os.path.join('ASSETS', 'M.png'))
+LetterM = pygame.transform.scale(LetterM_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterO_Image = pygame.image.load(os.path.join('ASSETS', 'O.png'))
+LetterO = pygame.transform.scale(LetterO_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterR_Image = pygame.image.load(os.path.join('ASSETS', 'R.png'))
+LetterR = pygame.transform.scale(LetterR_Image, (CHAR_WIDTH, CHAR_HEIGHT))
+LetterV_Image = pygame.image.load(os.path.join('ASSETS', 'V.png'))
+LetterV = pygame.transform.scale(LetterV_Image, (CHAR_WIDTH, CHAR_HEIGHT))
 
 
 def draw_window(player1, player2, bad1, bad2, bad3):
@@ -95,6 +111,18 @@ def hitPlayer(player1, player2, bad):
         if bad.y == player2.y:
             player2Alive = False
 
+def gameOver(G, A, M, E, O, V, e, R):
+    if player1Alive == False:
+        if player2Alive == False:
+            WIN.blit(LetterG, (G.x, G.y))
+            WIN.blit(LetterA, (A.x, A.y))
+            WIN.blit(LetterM, (M.x, M.y))
+            WIN.blit(LetterE1, (E.x, E.y))
+            WIN.blit(LetterO, (O.x, O.y))
+            WIN.blit(LetterV, (V.x, V.y))
+            WIN.blit(LetterE2, (e.x, e.y))
+            WIN.blit(LetterR, (R.x, R.y))
+    pygame.display.update()
 
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
@@ -102,6 +130,15 @@ def main():
     bad1 = pygame.Rect(0, 0, CHAR_WIDTH, CHAR_HEIGHT)
     bad2 = pygame.Rect(1030, 0, CHAR_WIDTH, CHAR_HEIGHT)
     bad3 = pygame.Rect(0, 530, CHAR_WIDTH, CHAR_HEIGHT)
+
+    G = pygame.Rect(100, 200, CHAR_WIDTH, CHAR_WIDTH)
+    A = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_WIDTH)
+    M = pygame.Rect(300, 200, CHAR_WIDTH, CHAR_WIDTH)
+    E = pygame.Rect(400, 200, CHAR_WIDTH, CHAR_WIDTH)
+    O = pygame.Rect(500, 200, CHAR_WIDTH, CHAR_WIDTH)
+    V = pygame.Rect(600, 200, CHAR_WIDTH, CHAR_WIDTH)
+    e = pygame.Rect(700, 200, CHAR_WIDTH, CHAR_WIDTH)
+    R = pygame.Rect(800, 200, CHAR_WIDTH, CHAR_WIDTH)
 
     clock = pygame.time.Clock()
     run = True
@@ -127,6 +164,8 @@ def main():
         hitPlayer(player1, player2, bad1)
         hitPlayer(player1, player2, bad2)
         hitPlayer(player1, player2, bad3)
+
+        gameOver(G, A, M, E, O, V, e, R)
 
     # shut down Pygame
     pygame.quit()
