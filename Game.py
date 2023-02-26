@@ -1,6 +1,7 @@
 import pygame
 import os
 import random
+import numpy as np
 
 WIDTH, HEIGHT = 1100, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -13,6 +14,11 @@ CHAR_WIDTH, CHAR_HEIGHT = 70, 70
 
 player1Alive = True
 player2Alive = True
+
+Player1Health = 100
+Player2Health = 100
+
+
 
 grass_Image = pygame.image.load(os.path.join('ASSETS', 'grass.png'))
 grass = pygame.transform.scale(grass_Image, (WIDTH, HEIGHT))
@@ -70,7 +76,6 @@ def player1_movement(keys_pressed, player1):
     if keys_pressed[pygame.K_d] and player1.x + VEL + player1.width < WIDTH:  # RIGHT
         player1.x += VEL
 
-
 def player2_movement(keys_pressed, player2):
     if keys_pressed[pygame.K_UP] and player2.y - VEL > 0:  # UP
         player2.y -= VEL
@@ -80,7 +85,6 @@ def player2_movement(keys_pressed, player2):
         player2.y += VEL
     if keys_pressed[pygame.K_RIGHT] and player2.x + VEL + player2.width < WIDTH:  # RIGHT
         player2.x += VEL
-
 
 def chasePlayer(player1, player2, bad):
     distPlayer1 = (abs(player1.x - bad.x) ** 2 + abs(player1.y - bad.y) ** 2) ** (1 / 2)
@@ -103,16 +107,19 @@ def chasePlayer(player1, player2, bad):
     if bad.y > chasePlayer.y:
         bad.y -= 1
 
-
 def hitPlayer(player1, player2, bad):
+    global Player1Health, Player2Health
     global player1Alive, player2Alive
     if bad.x == player1.x:
         if bad.y == player1.y:
-            player1Alive = False
-
+            Player1Health = Player1Health - 2
+            if Player1Health <= 0:
+                player1Alive = False
     if bad.x == player2.x:
         if bad.y == player2.y:
-            player2Alive = False
+            Player2Health = Player2Health - 1
+            if Player2Health <= 0:
+                player2Alive = False
 
 def gameOver(G, A, M, E, O, V, e, R):
     if player1Alive == False:
@@ -126,6 +133,18 @@ def gameOver(G, A, M, E, O, V, e, R):
             WIN.blit(LetterE2, (e.x, e.y))
             WIN.blit(LetterR, (R.x, R.y))
     pygame.display.update()
+
+def playerHealth(player1, player2):
+    global Player1Health
+    pygame.font.init()
+    player1Font = pygame.font.Font('freesansbold.ttf', 20)
+    player1Surface = player1Font.render('Player 1 Health: '+str(Player1Health), False, (0,0,0))
+    WIN.blit(player1Surface,(0,0))
+    player2Font = pygame.font.Font('freesansbold.ttf', 20)
+    player2Surface = player2Font.render('Player 2 Health: ' + str(Player2Health), False, (0, 0, 0))
+    WIN.blit(player2Surface, (0, 20))
+    pygame.display.update()
+
 
 def main():
     player1 = pygame.Rect(200, 200, CHAR_WIDTH, CHAR_HEIGHT)
@@ -184,6 +203,8 @@ def main():
         hitPlayer(player1, player2, bad1)
         hitPlayer(player1, player2, bad2)
         hitPlayer(player1, player2, bad3)
+
+        playerHealth(player1, player2)
 
         gameOver(G, A, M, E, O, V, e, R)
 
