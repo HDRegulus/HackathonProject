@@ -31,23 +31,23 @@ def draw_window(player1, player2, zombie):
     pygame.display.update()
 
 def player1_movement(keys_pressed, player1):
-        if keys_pressed[pygame.K_w]: # UP
+        if keys_pressed[pygame.K_w] and player1.y - VEL > 0: # UP
             player1.y -= VEL
-        if keys_pressed[pygame.K_a]: # LEFT
+        if keys_pressed[pygame.K_a] and player1.x - VEL > 0: # LEFT
             player1.x -= VEL
-        if keys_pressed[pygame.K_s]: # DOWN
+        if keys_pressed[pygame.K_s] and player1.y + VEL + player1.height < HEIGHT: # DOWN
             player1.y += VEL
-        if keys_pressed[pygame.K_d]: # RIGHT
+        if keys_pressed[pygame.K_d] and player1.x + VEL + player1.width < WIDTH: # RIGHT
             player1.x += VEL
 
 def player2_movement(keys_pressed, player2):
-        if keys_pressed[pygame.K_UP]: # UP
+        if keys_pressed[pygame.K_UP] and player2.y - VEL > 0: # UP
             player2.y -= VEL
-        if keys_pressed[pygame.K_LEFT]: # LEFT
+        if keys_pressed[pygame.K_LEFT] and player2.x - VEL > 0: # LEFT
             player2.x -= VEL
-        if keys_pressed[pygame.K_DOWN]: # DOWN
+        if keys_pressed[pygame.K_DOWN] and player2.y + VEL + player2.height < HEIGHT: # DOWN
             player2.y += VEL
-        if keys_pressed[pygame.K_RIGHT]: # RIGHT
+        if keys_pressed[pygame.K_RIGHT] and player2.x + VEL + player2.width < WIDTH: # RIGHT
             player2.x += VEL
 
 def zombie_movement(zombie, player1, player2):
